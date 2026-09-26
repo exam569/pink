@@ -1,0 +1,24 @@
+Experiment No: 2  (E1-2)
+Experiment Name: Write a Python program to encrypt and decrypt a message using a One-Time Pad.
+======================================================================
+
+OBJECTIVE:
+To implement the One-Time Pad (OTP) cipher and demonstrate how a truly random key, used only once and having the same length as the plaintext, provides theoretically unbreakable (perfect) secrecy.
+
+THEORY:
+The One-Time Pad, closely related to the Vernam Cipher, is the only cryptosystem proven by Claude Shannon to achieve perfect secrecy. Each character of the plaintext is combined with a character from a randomly generated key of equal length, typically using modular addition (C = (P + K) mod 26) or the XOR operation for binary data. Because the key is truly random, used exactly once, and never reused, the ciphertext reveals absolutely no statistical information about the plaintext -- every possible plaintext is equally likely given the ciphertext. The scheme's main practical limitations are the difficulty of generating and securely distributing a key as long as the message itself, and the requirement that the key must never be reused (key reuse breaks the security completely, as in the historical VENONA project).
+
+ALGORITHM:
+1. Read the plaintext message.
+2. Generate a truly random key of exactly the same length as the plaintext, using symbols from the same alphabet.
+3. For encryption, compute C = (P + K) mod 26 for each corresponding pair of plaintext and key characters.
+4. For decryption, compute P = (C - K) mod 26 using the same key.
+5. Discard the key after use -- it must never be reused for another message.
+
+SAMPLE INPUT / OUTPUT (from lab report):
+Input: Plaintext = "ATTACKATDAWN" (key generated randomly at run-time, same length as plaintext)
+Output:
+Plaintext : ATTACKATDAWN
+Key (OTP) : DLQXOKBMADRM
+Ciphertext: DEJXQUBFDDNZ
+Decrypted : ATTACKATDAWN

@@ -1,0 +1,28 @@
+Experiment No: 11  (E2-11)
+Experiment Name: Write a Python program to encrypt and decrypt a message using the RSA algorithm.
+======================================================================
+
+OBJECTIVE:
+To implement the RSA public-key cryptosystem from first principles and understand how key generation, encryption, and decryption rely on the difficulty of factoring large composite numbers.
+
+THEORY:
+RSA, named after its inventors Rivest, Shamir, and Adleman (1977), is the most widely used asymmetric (public-key) cryptosystem. Key generation begins by choosing two large distinct prime numbers p and q, computing the modulus n = p x q and Euler's totient phi(n) = (p-1)(q-1). A public exponent e is chosen such that 1 < e < phi(n) and gcd(e, phi(n)) = 1, and the private exponent d is computed as the modular multiplicative inverse of e modulo phi(n), i.e., e.d = 1 mod phi(n). The public key is (e, n) and the private key is (d, n). Encryption of a plaintext number M (M < n) is C = M^e mod n, and decryption is M = C^d mod n. RSA's security depends on the practical infeasibility of factoring the large modulus n back into p and q -- if an attacker could factor n, they could reconstruct phi(n) and hence d.
+
+ALGORITHM:
+1. Choose two distinct prime numbers p and q.
+2. Compute n = p * q and phi(n) = (p-1) * (q-1).
+3. Choose a public exponent e such that 1 < e < phi(n) and gcd(e, phi(n)) = 1.
+4. Compute the private exponent d, the modular inverse of e modulo phi(n) (e * d = 1 mod phi(n)).
+5. The public key is (e, n) and the private key is (d, n).
+6. Encrypt each plaintext character/number M as C = M^e mod n.
+7. Decrypt each ciphertext number as M = C^d mod n and reconstruct the message.
+
+SAMPLE INPUT / OUTPUT (from lab report):
+Input: p = 61, q = 53, Message = "HI" (encrypted character-by-character using ASCII codes)
+Output:
+Prime p, q      : 61 53
+Public Key (e,n): (2003, 3233)
+Private Key(d,n): (1067, 3233)
+Plaintext       : HI
+Ciphertext      : [3161, 1358]
+Decrypted       : HI

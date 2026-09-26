@@ -1,0 +1,28 @@
+Experiment No: 9  (E1-9)
+Experiment Name: Write a Python program to encrypt and decrypt a message using the ElGamal cryptosystem.
+======================================================================
+
+OBJECTIVE:
+To implement the ElGamal public-key cryptosystem and understand how its security relies on the computational difficulty of the Discrete Logarithm Problem (DLP) over a finite field.
+
+THEORY:
+Proposed by Taher ElGamal in 1985, the ElGamal cryptosystem is an asymmetric encryption scheme whose security rests on the hardness of computing discrete logarithms modulo a large prime. Key generation selects a large prime p, a primitive root (generator) g of the multiplicative group modulo p, a random private key x, and computes the public key y = g^x mod p. To encrypt a message M, the sender picks a random ephemeral key k and computes the ciphertext pair C1 = g^k mod p and C2 = (M . y^k) mod p. The receiver decrypts by computing the shared secret s = C1^x mod p and recovering M = (C2 . s^-1) mod p, where s^-1 is the modular inverse of s (obtainable via Fermat's Little Theorem since p is prime). A key feature of ElGamal is that encryption is randomized -- encrypting the same message twice yields different ciphertexts -- which provides semantic security.
+
+ALGORITHM:
+1. Select a large prime p and find a primitive root (generator) g of p.
+2. Generate the private key x (a random integer, 2 <= x <= p-2) and compute the public key y = g^x mod p.
+3. To encrypt message M: choose a random ephemeral key k, then compute C1 = g^k mod p and C2 = (M * y^k) mod p.
+4. Send the ciphertext pair (C1, C2) to the receiver.
+5. To decrypt: compute the shared secret s = C1^x mod p, then its modular inverse s^-1 mod p (via s^(p-2) mod p, Fermat's Little Theorem).
+6. Recover the plaintext as M = (C2 * s^-1) mod p.
+
+SAMPLE INPUT / OUTPUT (from lab report):
+Input: p = 467 (public prime, g found automatically as its primitive root), Message M = 123
+Output:
+Prime (p)          : 467
+Primitive Root (g) : 2
+Private Key (x)    : 295
+Public Key (y)     : 258
+Plaintext (M)      : 123
+Ciphertext (C1,C2) : (295, 200)
+Decrypted (M)      : 123

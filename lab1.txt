@@ -1,0 +1,24 @@
+Experiment No: 1  (E1-1)
+Experiment Name: Write a Python program to encrypt and decrypt a message using Caesar cipher.
+======================================================================
+
+OBJECTIVE:
+To understand and implement the Caesar Cipher, a classical substitution technique, and to observe how a fixed numerical shift can be used to encrypt and decrypt a message.
+
+THEORY:
+The Caesar Cipher is one of the earliest and simplest encryption techniques, named after Julius Caesar, who used it to communicate with his generals. It is a type of mono-alphabetic substitution cipher in which every letter of the plaintext is replaced by a letter found by shifting a fixed number of positions (the key) down the alphabet. Mathematically, if each letter is represented by a number A=0, B=1, ..., Z=25, encryption of a letter P with shift k is C = (P + k) mod 26, and decryption is P = (C - k) mod 26. Because there are only 26 possible shifts, the Caesar cipher offers very weak security and can be broken instantly by brute force or frequency analysis. Even so, it forms the conceptual foundation for more advanced substitution ciphers.
+
+ALGORITHM:
+1. Read the plaintext message and the shift value (key) k.
+2. Convert each alphabetic character to its numeric equivalent (A=0 ... Z=25).
+3. For encryption, compute C = (P + k) mod 26 for every letter; leave non-alphabetic characters unchanged.
+4. For decryption, compute P = (C - k) mod 26 for every letter of the ciphertext.
+5. Convert the resulting numbers back into letters and display the ciphertext / recovered plaintext.
+
+SAMPLE INPUT / OUTPUT (from lab report):
+Input: Plaintext = "Cryptography is Fun", Shift = 5
+Output:
+Plaintext : Cryptography is Fun
+Shift     : 5
+Ciphertext: Hwduytlwfumd nx Kzs
+Decrypted : Cryptography is Fun

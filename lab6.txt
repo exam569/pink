@@ -1,0 +1,32 @@
+Experiment No: 6  (E1-6)
+Experiment Name: Write a Python program to encrypt and decrypt a message using the Playfair Cipher.
+======================================================================
+
+OBJECTIVE:
+To understand and implement the Playfair Cipher, a digraph (letter-pair) substitution cipher based on a 5x5 key square, and to appreciate how it resists simple frequency analysis better than single-letter substitution ciphers.
+
+THEORY:
+Invented by Sir Charles Wheatstone in 1854 and popularized by Lord Playfair, the Playfair Cipher encrypts pairs of letters (digraphs) instead of single letters, making it significantly stronger than mono-alphabetic ciphers. A 5x5 key square is built from a keyword (duplicate letters removed, 'I' and 'J' combined) followed by the remaining letters of the alphabet in order. The plaintext is split into digraphs; identical letters within a pair are separated with a filler letter (commonly 'X'), and a trailing single letter is padded with 'X'. Each digraph is then transformed using three rules based on the relative positions of its two letters in the key square: (1) same row -> shift right, (2) same column -> shift down, (3) otherwise -> form a rectangle and swap corners on the same row. Decryption reverses these rules (shift left / shift up / same rectangle swap).
+
+ALGORITHM:
+1. Build a 5x5 key square from the keyword, merging I/J and omitting repeated letters.
+2. Split the plaintext into digraphs, inserting 'X' between identical adjacent letters and padding an odd final letter with 'X'.
+3. For each digraph, locate both letters in the key square.
+4. Same row -> replace each letter with the one immediately to its right (wrap around).
+5. Same column -> replace each letter with the one immediately below it (wrap around).
+6. Otherwise -> replace each letter with the letter in its own row but the other letter's column (rectangle rule).
+7. For decryption, apply the mirror rules (left / up / same rectangle swap) to recover the plaintext digraphs.
+
+SAMPLE INPUT / OUTPUT (from lab report):
+Input: Keyword = "MONARCHY", Plaintext = "INSTRUMENTS"
+Output:
+Key Square:
+  ['M', 'O', 'N', 'A', 'R']
+  ['C', 'H', 'Y', 'B', 'D']
+  ['E', 'F', 'G', 'I', 'K']
+  ['L', 'P', 'Q', 'S', 'T']
+  ['U', 'V', 'W', 'X', 'Z']
+ 
+Plaintext : INSTRUMENTS
+Ciphertext: GATLMZCLRQXA
+Decrypted : INSTRUMENTSX

@@ -1,0 +1,27 @@
+Experiment No: 7  (E1-7)
+Experiment Name: Write a Python program to encrypt and decrypt a message using the 2x2 Hill Cipher.
+======================================================================
+
+OBJECTIVE:
+To implement the Hill Cipher using a 2x2 key matrix, and to understand how linear algebra (matrix multiplication and modular inverses) can be applied to polygraphic substitution encryption.
+
+THEORY:
+The Hill Cipher, developed by Lester S. Hill in 1929, is a polygraphic substitution cipher based on linear algebra over modulo 26 arithmetic. The plaintext is divided into blocks of n letters, each represented as a numeric column vector (A=0, ..., Z=25). Encryption multiplies this vector by an invertible n x n key matrix K modulo 26: C = (K . P) mod 26. Decryption requires the modular multiplicative inverse of the key matrix, K^-1, such that P = (K^-1 . C) mod 26. For a matrix to be invertible modulo 26, its determinant must be coprime with 26 (i.e., gcd(det(K), 26) = 1). Because it operates on blocks rather than single letters, the Hill cipher hides single-letter frequency information, but it remains vulnerable to known-plaintext attacks since the transformation is linear.
+
+ALGORITHM:
+1. Choose a 2x2 key matrix K whose determinant is invertible modulo 26 (i.e., gcd(det K, 26) = 1).
+2. Convert the plaintext into numeric pairs (A=0 ... Z=25), padding with 'X' if the length is odd.
+3. For encryption, multiply each 2-letter block vector by K modulo 26 to obtain the ciphertext block: C = (K.P) mod 26.
+4. For decryption, compute the modular inverse matrix K^-1 modulo 26 using the adjugate and modular inverse of the determinant.
+5. Multiply each ciphertext block by K^-1 modulo 26 to recover the plaintext block: P = (K^-1.C) mod 26.
+6. Convert the resulting numeric blocks back into letters.
+
+SAMPLE INPUT / OUTPUT (from lab report):
+Input: Key Matrix = [[3,3],[2,5]], Plaintext = "HELP"
+Output:
+Key Matrix:
+ [[3 3]
+ [2 5]]
+Plaintext : HELP
+Ciphertext: HIAT
+Decrypted : HELP

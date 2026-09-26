@@ -1,0 +1,32 @@
+Experiment No: 4  (E1-4)
+Experiment Name: Write a Python program to compute the GCD of two numbers using the Euclidean Algorithm.
+======================================================================
+
+OBJECTIVE:
+To implement the classical Euclidean Algorithm for computing the Greatest Common Divisor (GCD) of two integers, a fundamental building block used throughout number-theoretic cryptography (e.g., RSA key generation, modular inverses).
+
+THEORY:
+The Euclidean Algorithm, attributed to Euclid (c. 300 BC), is an efficient method for computing the GCD of two integers a and b. It is based on the property that gcd(a, b) = gcd(b, a mod b), and gcd(a, 0) = a. By repeatedly replacing the larger number with the remainder of dividing it by the smaller number, the algorithm converges to the GCD in a logarithmic number of steps relative to the size of the inputs. In cryptography, the Euclidean Algorithm (and its extended version) is essential for verifying that two numbers are coprime (gcd = 1) -- a requirement, for example, when choosing the public exponent e in RSA -- and for computing modular multiplicative inverses used in decryption.
+
+ALGORITHM:
+1. Read two positive integers a and b.
+2. While b is not equal to 0, repeat: replace (a, b) with (b, a mod b).
+3. When b becomes 0, the current value of a is the GCD.
+4. Display each division step and the final GCD.
+
+SAMPLE INPUT / OUTPUT (from lab report):
+Input: a = 1970, b = 1066
+Output:
+Finding GCD(1970, 1066) using Euclidean Algorithm:
+  gcd(1970, 1066) => 1970 = 1 * 1066 + 904
+  gcd(1066, 904) => 1066 = 1 * 904 + 162
+  gcd(904, 162) => 904 = 5 * 162 + 94
+  gcd(162, 94) => 162 = 1 * 94 + 68
+  gcd(94, 68) => 94 = 1 * 68 + 26
+  gcd(68, 26) => 68 = 2 * 26 + 16
+  gcd(26, 16) => 26 = 1 * 16 + 10
+  gcd(16, 10) => 16 = 1 * 10 + 6
+  gcd(10, 6) => 10 = 1 * 6 + 4
+  gcd(6, 4) => 6 = 1 * 4 + 2
+  gcd(4, 2) => 4 = 2 * 2 + 0
+GCD = 2

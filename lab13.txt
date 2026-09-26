@@ -1,0 +1,36 @@
+Experiment No: 13  (E2-13)
+Experiment Name: Write a Python program to perform modular arithmetic operations using a primitive root.
+======================================================================
+
+OBJECTIVE:
+To find the primitive root(s) of a given prime modulus and to demonstrate modular exponentiation and modular arithmetic operations built upon a primitive root, as used in Diffie-Hellman and ElGamal.
+
+THEORY:
+For a prime p, an integer g is called a primitive root (or generator) of p if the powers of g, taken modulo p (g^1, g^2, ..., g^(p-1)), produce every non-zero residue modulo p exactly once -- i.e., g generates the entire multiplicative group Z*p of order p-1. Primitive roots are central to many public-key cryptosystems (Diffie-Hellman, ElGamal, DSA) because they allow every non-zero element modulo p to be expressed as a power of a single generator, which underlies the structure of the Discrete Logarithm Problem. A prime is guaranteed to have at least one primitive root, and in fact has exactly phi(p-1) of them. Modular arithmetic built on a primitive root exhibits the same laws of exponents as ordinary arithmetic (e.g., g^a * g^b mod p = g^(a+b) mod p), which is exploited to perform efficient key exchange and encryption operations.
+
+ALGORITHM:
+1. Read a prime number p.
+2. For each candidate g from 2 to p-1, compute the set of {g^i mod p : i = 1, ..., p-1}.
+3. If this set contains all p-1 non-zero residues (1 to p-1), g is a primitive root of p.
+4. Collect and display all such primitive roots.
+5. Using one primitive root as generator, tabulate its powers modulo p and demonstrate modular arithmetic identities such as g^a * g^b mod p = g^(a+b) mod p.
+
+SAMPLE INPUT / OUTPUT (from lab report):
+Input: p = 11
+Output:
+All primitive roots of 11: [2, 6, 7, 8]
+Powers of primitive root g=2 modulo p=11:
+  g^1 mod 11 = 2
+  g^2 mod 11 = 4
+  g^3 mod 11 = 8
+  g^4 mod 11 = 5
+  g^5 mod 11 = 10
+  g^6 mod 11 = 9
+  g^7 mod 11 = 7
+  g^8 mod 11 = 3
+  g^9 mod 11 = 6
+  g^10 mod 11 = 1
+ 
+Using primitive root g=2 as generator:
+  g^3 mod 11 * g^5 mod 11 mod 11 = 3
+  g^(3+5) mod 11                   = 3

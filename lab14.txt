@@ -1,0 +1,28 @@
+Experiment No: 14  (E2-14)
+Experiment Name: Write a Python program to compute the GCD of two numbers using the Extended Euclidean Algorithm.
+======================================================================
+
+OBJECTIVE:
+To implement the Extended Euclidean Algorithm, which computes not only the GCD of two integers but also the Bezout coefficients x and y satisfying a.x + b.y = gcd(a,b), and to apply it to find modular multiplicative inverses used throughout public-key cryptography.
+
+THEORY:
+The Extended Euclidean Algorithm augments the standard Euclidean Algorithm to also compute integers x and y (called Bezout coefficients) such that a.x + b.y = gcd(a, b). It works recursively: at each step, using gcd(a,b) = gcd(b, a mod b), the coefficients are updated by back-substitution as the recursion unwinds. This algorithm is of central importance in cryptography because, when gcd(a, m) = 1, the coefficient x satisfies a.x = 1 (mod m) -- meaning x is precisely the modular multiplicative inverse of a modulo m. This is exactly how the RSA private exponent d (the inverse of e modulo phi(n)) is efficiently computed in practice, replacing slow brute-force search for the inverse.
+
+ALGORITHM:
+1. Read two integers a and b.
+2. If b = 0, return (a, 1, 0) as the base case (gcd = a, x = 1, y = 0).
+3. Otherwise, recursively compute (gcd, x1, y1) = extended_gcd(b, a mod b).
+4. Back-substitute to obtain the current coefficients: x = y1, and y = x1 - (a // b) * y1.
+5. Return (gcd, x, y), verifying that a*x + b*y = gcd.
+6. Apply the algorithm to compute a modular inverse: if gcd(a, m) = 1, the modular inverse of a mod m is x mod m.
+
+SAMPLE INPUT / OUTPUT (from lab report):
+Input: a = 240, b = 46  |  Modular inverse example: a = 7, m = 26
+Output:
+a = 240, b = 46
+GCD(240, 46) = 2
+Bezout coefficients: x = -9, y = 47
+Verification: 240*(-9) + 46*(47) = 2
+ 
+Modular inverse of 7 mod 26 = 15
+Check: (7 * 15) mod 26 = 1

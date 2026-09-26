@@ -1,0 +1,49 @@
+Experiment No: 5  (E1-5)
+Experiment Name: Write a Python program to decrypt a Caesar Cipher encrypted message using brute-force attack.
+======================================================================
+
+OBJECTIVE:
+To demonstrate a brute-force (exhaustive key search) attack against the Caesar cipher, exposing its fundamental weakness of having only 26 possible keys.
+
+THEORY:
+A brute-force attack systematically tries every possible key until the correct one is found. Since the Caesar cipher's key space is only the 26 possible shift values (0-25), an attacker who intercepts a ciphertext can simply decrypt it with every shift and visually (or programmatically, using dictionary/frequency checks) identify the one that produces meaningful plaintext. This experiment illustrates why a sufficiently large key space is essential for cryptographic security -- a lesson that motivates the design of modern ciphers such as AES and RSA, whose key spaces are astronomically large and therefore computationally infeasible to search exhaustively.
+
+ALGORITHM:
+1. Read the intercepted ciphertext (the shift/key is assumed unknown).
+2. Initialize a loop for every possible shift value from 0 to 25.
+3. For each shift, decrypt the ciphertext using P = (C - shift) mod 26.
+4. Print (or evaluate against a dictionary) the resulting candidate plaintext for every shift.
+5. Identify the shift that produces a meaningful, grammatically correct message as the correct key.
+
+SAMPLE INPUT / OUTPUT (from lab report):
+Input: Ciphertext = "Mjqqt, Btwqi!"  (unknown shift, actually encrypted with shift = 5)
+Output:
+Ciphertext: Mjqqt, Btwqi!
+ 
+Shift Decrypted Text
+0     Mjqqt, Btwqi!
+1     Lipps, Asvph!
+2     Khoor, Zruog!
+3     Jgnnq, Yqtnf!
+4     Ifmmp, Xpsme!
+5     Hello, World!
+6     Gdkkn, Vnqkc!
+7     Fcjjm, Umpjb!
+8     Ebiil, Tloia!
+9     Dahhk, Sknhz!
+10    Czggj, Rjmgy!
+11    Byffi, Qilfx!
+12    Axeeh, Phkew!
+13    Zwddg, Ogjdv!
+14    Yvccf, Nficu!
+15    Xubbe, Mehbt!
+16    Wtaad, Ldgas!
+17    Vszzc, Kcfzr!
+18    Uryyb, Jbeyq!
+19    Tqxxa, Iadxp!
+20    Spwwz, Hzcwo!
+21    Rovvy, Gybvn!
+22    Qnuux, Fxaum!
+23    Pmttw, Ewztl!
+24    Olssv, Dvysk!
+25    Nkrru, Cuxrj!

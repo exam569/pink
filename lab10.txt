@@ -1,0 +1,28 @@
+Experiment No: 10  (E2-10)
+Experiment Name: Write a Python program to encrypt and decrypt a message using DES.
+======================================================================
+
+OBJECTIVE:
+To implement message encryption and decryption using the Data Encryption Standard (DES), a symmetric-key block cipher, and to understand its structure, key size, and operating mode.
+
+THEORY:
+The Data Encryption Standard (DES), adopted as a US federal standard (FIPS PUB 46) in 1977, is a symmetric-key block cipher that encrypts data in fixed-size 64-bit blocks using a 56-bit effective key (stored as 64 bits with 8 parity bits). Internally, DES applies an initial permutation followed by 16 rounds of a Feistel network -- each round expands, mixes with a round subkey (derived from the main key via a key-schedule of permutations and shifts), substitutes through eight S-boxes, and permutes the block -- and concludes with a final permutation. Because its 56-bit key space (2^56 keys) can now be exhaustively searched with modern hardware, DES is considered cryptographically broken and has been superseded by Triple DES and AES; nevertheless, it remains foundational for understanding Feistel-based block cipher design. In this experiment, DES is used in Electronic Code Book (ECB) mode with PKCS#7 padding via the PyCryptodome library.
+
+ALGORITHM:
+1. Choose an 8-byte (64-bit) secret key, shared between sender and receiver.
+2. Pad the plaintext to a multiple of the DES block size (8 bytes) using PKCS#7 padding.
+3. Create a DES cipher object in ECB mode using the key.
+4. Encrypt the padded plaintext block-by-block to obtain the ciphertext.
+5. For decryption, create a DES cipher object with the same key, decrypt the ciphertext, and remove the padding to recover the original plaintext.
+
+NOTE: This program requires the 'pycryptodome' library.
+Install it first with:  pip install pycryptodome
+(Import name stays 'Crypto' even though the package is 'pycryptodome'.)
+
+SAMPLE INPUT / OUTPUT (from lab report):
+Input: Key = b"8bytekey" (8 bytes), Plaintext = "Cryptography Lab"
+Output:
+Key (8 bytes)  : b'8bytekey'
+Plaintext      : Cryptography Lab
+Ciphertext(hex): 9e63bbb685859b618eae62a35a62bfc8974620abef5ef24a
+Decrypted      : Cryptography Lab

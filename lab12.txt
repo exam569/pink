@@ -1,0 +1,31 @@
+Experiment No: 12  (E2-12)
+Experiment Name: Write a Python program to simulate the Diffie-Hellman key exchange.
+======================================================================
+
+OBJECTIVE:
+To simulate the Diffie-Hellman Key Exchange protocol and demonstrate how two parties can establish a shared secret key over an insecure channel without ever transmitting the key itself.
+
+THEORY:
+Proposed by Whitfield Diffie and Martin Hellman in 1976, the Diffie-Hellman (DH) protocol was the first published practical method for establishing a shared secret between two parties communicating over a public channel. Both parties agree on a public prime p and a public base (primitive root) g. Alice chooses a private integer a and sends A = g^a mod p to Bob; Bob chooses a private integer b and sends B = g^b mod p to Alice. Alice then computes the shared key as B^a mod p, and Bob computes it as A^b mod p; both arrive at the same value, g^(ab) mod p, because modular exponentiation is commutative in the exponent. An eavesdropper who observes p, g, A, and B cannot feasibly recover a, b, or the shared secret without solving the Discrete Logarithm Problem, which is computationally hard for sufficiently large p. Diffie-Hellman provides key agreement only -- it does not itself provide authentication, which is why it is often combined with digital signatures in practice (e.g., in TLS).
+
+ALGORITHM:
+1. Agree publicly on a large prime p and a primitive root (base) g.
+2. Alice selects a private random integer a and computes her public value A = g^a mod p.
+3. Bob selects a private random integer b and computes his public value B = g^b mod p.
+4. Alice and Bob exchange their public values A and B over the (insecure) channel.
+5. Alice computes the shared secret key as K = B^a mod p.
+6. Bob computes the shared secret key as K = A^b mod p.
+7. Verify that both computed values are equal -- this is the common shared secret key.
+
+SAMPLE INPUT / OUTPUT (from lab report):
+Input: Public prime p = 23, Public base g = 5 (private keys a, b chosen randomly at run-time)
+Output:
+Public Prime (p)      : 23
+Public Base (g)       : 5
+Alice's Private (a)   : 18
+Alice's Public (A)    : 6
+Bob's Private (b)     : 15
+Bob's Public (B)      : 19
+Alice's Shared Secret : 8
+Bob's Shared Secret   : 8
+Keys Match?           : True

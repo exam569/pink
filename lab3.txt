@@ -1,0 +1,24 @@
+Experiment No: 3  (E1-3)
+Experiment Name: Write a Python program to encrypt and decrypt a message using a Monoalphabetic Substitution Cipher.
+======================================================================
+
+OBJECTIVE:
+To understand and implement the Monoalphabetic Substitution Cipher, in which each plaintext letter is mapped to a unique, arbitrarily chosen ciphertext letter, and to examine its resistance compared to a simple shift cipher.
+
+THEORY:
+A Monoalphabetic Substitution Cipher replaces every letter of the plaintext with another letter according to a fixed, randomly generated one-to-one mapping (a permutation of the 26-letter alphabet), rather than a uniform shift as in the Caesar cipher. This yields 26! (about 4 x 10^26) possible keys, which makes brute-force key search infeasible. However, the cipher preserves the frequency distribution of letters -- the most frequent ciphertext symbol is very likely to correspond to 'E', the most common English letter -- so it remains vulnerable to frequency analysis, especially for longer ciphertexts. Historically important, it has been superseded by ciphers that flatten letter frequencies (e.g., polyalphabetic and block ciphers).
+
+ALGORITHM:
+1. Generate a random permutation of the alphabet A-Z to serve as the substitution key.
+2. Build a mapping table from each plaintext letter to its corresponding ciphertext letter.
+3. For encryption, replace every plaintext letter with its mapped ciphertext letter using the table.
+4. For decryption, build the inverse mapping and replace every ciphertext letter with its original plaintext letter.
+5. Leave spaces and punctuation unchanged.
+
+SAMPLE INPUT / OUTPUT (from lab report):
+Input: Plaintext = "HELLO WORLD" (substitution key generated randomly at run-time)
+Output:
+Plaintext : HELLO WORLD
+Ciphertext: XMCCS LSVCR
+Decrypted : HELLO WORLD
+(exact ciphertext varies each run since the key is randomly generated)

@@ -1,0 +1,27 @@
+Experiment No: 8  (E1-8)
+Experiment Name: Write a Python program to encrypt a message using a Transposition cipher with double encryption.
+======================================================================
+
+OBJECTIVE:
+To implement a Columnar Transposition Cipher and demonstrate double encryption -- applying the transposition twice with two different keys -- to increase the diffusion and complexity of the resulting ciphertext.
+
+THEORY:
+Unlike substitution ciphers, a Transposition Cipher does not change any letter of the plaintext; it only rearranges (permutes) the positions of the letters according to a rule defined by a key. In the Columnar Transposition Cipher, the plaintext is written row-by-row into a grid whose width equals the key length, and the columns are then read out in the alphabetical order of the key's letters to form the ciphertext. Applying transposition a second time with a different key -- known as double (or double columnar) transposition -- was historically used (e.g., by field armies in both World Wars) because a single transposition can often be broken by anagramming; a second transposition with an unrelated key greatly increases the diffusion of the original letter positions and makes cryptanalysis substantially harder.
+
+ALGORITHM:
+1. Choose two keys, Key1 and Key2 (their letters define the column order via alphabetical ranking).
+2. Remove spaces from the plaintext and, using Key1's length as the number of columns, write the text row-by-row into a grid, padding the final row with 'X'.
+3. Read the grid out column-by-column in the order given by sorting Key1's letters alphabetically -- this produces the first ciphertext.
+4. Repeat the same row-fill / column-read process on the first ciphertext, this time using Key2 -- this produces the final (doubly transposed) ciphertext.
+5. To decrypt, reverse the two passes in opposite order: first undo the Key2 transposition, then undo the Key1 transposition.
+
+SAMPLE INPUT / OUTPUT (from lab report):
+Input: Plaintext = "ATTACK POSTPONED UNTIL TWO PM", Key1 = "ZEBRA", Key2 = "TIGER"
+Output:
+Plaintext          : ATTACK POSTPONED UNTIL TWO PM
+Key 1               : ZEBRA
+Key 2               : TIGER
+After 1st pass      : CTDLMTONTOTPONWASEIPAKPUT
+Final Ciphertext    : LTNIUDNOEPTOPSKMOWPTCTTAA
+After 1st decrypt   : CTDLMTONTOTPONWASEIPAKPUT
+Recovered Plaintext : ATTACKPOSTPONEDUNTILTWOPM
