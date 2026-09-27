@@ -1,0 +1,425 @@
+====================================================================
+CRYPTOGRAPHY AND DATA SECURITY - SESSIONAL LAB NOTES
+====================================================================
+
+
+====================================================================
+E1-1: CAESAR CIPHER
+====================================================================
+
+THEORY:
+Caesar Cipher is one of the oldest substitution ciphers. Each letter
+is shifted by a fixed number of positions (key) in the alphabet.
+Example: shift=3 => A->D, B->E.
+Encryption: C = (P + K) mod 26
+Decryption: P = (C - K) mod 26
+
+CODE EXPLANATION:
+- caesar(text, shift) builds a translation table using str.maketrans().
+- shifted_lower = lower[shift:] + lower[:shift] rotates the alphabet
+  string to create the shifted version.
+- Encryption uses positive shift; decryption calls the same function
+  with negative shift (-key), so no separate decrypt function is needed.
+- Non-alphabet characters (spaces, punctuation) are not in the
+  translation table, so they remain unchanged.
+
+SAMPLE INPUT/OUTPUT:
+Enter your message: HELLO WORLD
+Enter shift key: 3
+Encrypted: KHOOR ZRUOG
+Decrypted: HELLO WORLD
+
+KEY POINT FOR VIVA:
+Symmetric key cipher - same key used for encrypt/decrypt, but only
+26 possible keys, so it can be easily brute-forced.
+
+
+====================================================================
+E1-2: ONE-TIME PAD (OTP)
+====================================================================
+
+THEORY:
+OTP is theoretically unbreakable if the key is: (1) as long as the
+message, (2) truly random, (3) used only once. It uses the XOR
+operation because XOR is reversible:
+C = P XOR K
+P = C XOR K
+
+CODE EXPLANATION:
+- generate_key(length) creates a list of random integers (0-255)
+  equal to the message length; this is the key.
+- otp() is dual purpose: if input is a string (encryption), it XORs
+  each character's ASCII value with the key (ord(c) ^ k) and returns
+  a list of numbers. If input is a list of numbers (decryption), it
+  XORs again and converts back to characters (chr(c ^ k)).
+- XOR property: (P XOR K) XOR K = P, so the same function handles
+  both encryption and decryption.
+
+SAMPLE INPUT/OUTPUT:
+Enter message: HI
+Key      : [173, 22]
+Encrypted: [220, 118]
+Decrypted: HI
+
+NOTE:
+Encrypted output is not always readable characters since XOR
+produces random byte values, hence shown as a list of numbers.
+
+
+====================================================================
+E1-3: MONOALPHABETIC SUBSTITUTION CIPHER
+====================================================================
+
+THEORY:
+Each plaintext letter is replaced by a randomly shuffled cipher
+letter (fixed one-to-one mapping), unlike Caesar's fixed shift.
+Key space is huge (26! ~ 4x10^26), so brute-force is practically
+impossible, but it can still be broken using frequency analysis.
+
+CODE EXPLANATION:
+- plain = list(string.ascii_uppercase): list of A-Z.
+- shuffled = plain.copy(); random.shuffle(shuffled): same letters
+  rearranged randomly to form the cipher alphabet.
+- key = dict(zip(plain, shuffled)): mapping dictionary, e.g. A->Q,
+  B->W, etc.
+- rev is the reverse mapping, used for decryption.
+- Encryption: each character replaced via key.get(c, c)
+  (non-letters remain unchanged).
+
+SAMPLE INPUT/OUTPUT:
+Enter message: HELLO
+Key Mapping: A->Q, B->W, ... H->X, E->K, L->M, O->P ...
+Encrypted: XKMMP
+Decrypted: HELLO
+
+
+====================================================================
+E1-4: GCD USING EUCLIDEAN ALGORITHM
+====================================================================
+
+THEORY:
+Core formula: gcd(a, b) = gcd(b, a mod b), repeated until b = 0,
+at which point a is the GCD. Important in cryptography because
+algorithms like RSA need to check coprimality (gcd = 1).
+
+CODE EXPLANATION:
+- while b != 0: loop updates a, b = b, a % b each iteration.
+- Each step is saved as a string in the steps list for explanation:
+  a = quotient*b + remainder.
+- When b becomes 0, a is the final GCD.
+
+SAMPLE INPUT/OUTPUT:
+Enter first number a: 48
+Enter second number b: 18
+gcd(48, 18) => 48 = 2 * 18 + 12
+gcd(18, 12) => 18 = 1 * 12 + 6
+gcd(12, 6) => 12 = 2 * 6 + 0
+GCD = 6
+
+
+====================================================================
+E1-5: CAESAR CIPHER BRUTE-FORCE ATTACK
+====================================================================
+
+THEORY:
+Since Caesar cipher has only 25 possible shifts (1-25), a
+cryptanalyst can try all shifts and check which one produces the
+most meaningful English words (common words). This is a
+frequency/dictionary-based brute-force attack.
+
+CODE EXPLANATION:
+- common_words list holds frequent English words (THE, AND, IS...).
+- caesar_decrypt() is run for all 26 shifts.
+- For each decrypted output, a score is calculated based on how many
+  common words appear (sum(dec.count(w) for w in common_words)).
+- The shift with the highest score is taken as the most likely
+  correct shift.
+
+SAMPLE INPUT/OUTPUT:
+Enter ciphertext: KHOOR WKHUH
+... (26 shifts printed) ...
+Most likely shift: 3
+Decrypted text   : HELLO THERE
+
+
+====================================================================
+E1-6: PLAYFAIR CIPHER
+====================================================================
+
+THEORY:
+Playfair is a digraph (2-letter) substitution cipher. A 5x5 matrix
+is built from a keyword (I and J are treated as the same letter, so
+there are 25 letters total). Plaintext is split into letter pairs
+and encrypted using 3 rules:
+1. Same row -> take the letter to the right of each.
+2. Same column -> take the letter below each.
+3. Rectangle -> take the letter at the same row but the other
+   corner's column.
+
+CODE EXPLANATION:
+- matrix(key) builds a 5x5 grid from the key plus the remaining
+  alphabet (excluding J), removing duplicates.
+- make_pairs(text) splits text into pairs; if both letters in a pair
+  are the same, an X is inserted between them; if the text length is
+  odd, an X is added at the end.
+- crypt(text, key, encrypt) uses d=1 (encrypt) or d=-1 (decrypt) to
+  shift rows/columns according to the 3 rules above.
+
+SAMPLE INPUT/OUTPUT:
+Enter plaintext: HELLO
+Key used: MONARCHY (randomly generated in code)
+Encrypted: (depends on key)
+Decrypted: HELXLO (X inserted for the double L)
+
+
+====================================================================
+E1-7: 2x2 HILL CIPHER
+====================================================================
+
+THEORY:
+Hill Cipher is a linear-algebra based polygraphic cipher. Plaintext
+letters are converted to numbers (A=0...Z=25), taken 2 at a time,
+and multiplied by a key matrix mod 26:
+C = K x P mod 26
+Decryption requires the inverse of the key matrix (mod 26):
+P = K^-1 x C mod 26
+Finding the inverse requires the modular inverse of the determinant.
+
+CODE EXPLANATION:
+- random_key() generates a 2x2 key whose determinant mod 26 is
+  invertible (mod_inv exists).
+- hill(text, k) takes each pair of letters (p1, p2) and computes:
+  c1 = k0*p1 + k1*p2 (mod 26)
+  c2 = k2*p1 + k3*p2 (mod 26)
+- key_inverse(k) computes the determinant, its modular inverse, and
+  builds the adjugate matrix to form the key's inverse - used for
+  decryption.
+
+SAMPLE INPUT/OUTPUT:
+Enter plaintext: HELLO
+Key matrix: [3, 3, 2, 5] (random, valid determinant)
+Encrypted: (matrix math output)
+Decrypted: HELLOX
+
+
+====================================================================
+E1-8: TRANSPOSITION CIPHER (DOUBLE ENCRYPTION)
+====================================================================
+
+THEORY:
+In transposition cipher, letters are not changed, only their
+POSITIONS (order) are changed. In columnar transposition, columns
+are sorted alphabetically based on the key letters, then read
+column-wise. "Double encryption" means applying the same process
+twice with two different keys, which increases security further.
+
+CODE EXPLANATION:
+- encrypt(text, key) divides text into rows based on key length,
+  then order = sorted(range(len(key)), key=lambda i: key[i]) sorts
+  the columns alphabetically according to the key, and reads
+  column-wise in that sorted order to produce the output.
+- The text is first encrypted with key1 (first), then that output is
+  encrypted again with key2 (final) - this is the double encryption.
+
+SAMPLE INPUT/OUTPUT:
+Enter plaintext: HELLO WORLD
+Key 1: QZWXA   Key 2: MBNTC
+After 1st pass  : (scrambled text)
+Final Ciphertext: (further scrambled)
+
+NOTE: Only encryption is shown here (no decryption), as per the lab
+statement which only asks for "encrypt".
+
+
+====================================================================
+E1-9: ELGAMAL CRYPTOSYSTEM
+====================================================================
+
+THEORY:
+ElGamal is an asymmetric (public-key) cryptosystem whose security is
+based on the Discrete Logarithm Problem.
+- Key generation: prime p, primitive root g, private key x,
+  public key y = g^x mod p
+- Encryption: choose random k; C1 = g^k mod p, C2 = M * y^k mod p
+- Decryption: s = C1^x mod p, then M = C2 * s^-1 mod p
+
+CODE EXPLANATION:
+- find_primitive_root(p) checks all powers of g mod p; if all (p-1)
+  values are unique, g is a primitive root.
+- generate_keys: private key x is random, public key y = g^x mod p.
+- encrypt: picks random k and computes c1, c2 using the formulas above.
+- decrypt: computes shared secret s, then uses Fermat's Little
+  Theorem (s^(p-2) mod p) as the modular inverse to recover M.
+
+SAMPLE INPUT/OUTPUT:
+Enter a prime number p: 467
+Enter message (integer, less than p): 123
+Primitive Root (g): 2
+Private Key (x): 213
+Public Key (y): 339
+Ciphertext (C1,C2): (105, 302)
+Decrypted (M): 123
+
+
+====================================================================
+E2-1: DES (DATA ENCRYPTION STANDARD)
+====================================================================
+
+THEORY:
+DES is a symmetric block cipher with 64-bit block size and 56-bit
+effective key size (stored as 64 bits with 8 parity bits). It uses a
+16-round Feistel structure. PyCryptodome library is used here since
+implementing DES from scratch is complex - using a library is
+standard industry practice.
+
+CODE EXPLANATION:
+- key: an 8-byte (64-bit) random key is generated.
+- DES.new(key, DES.MODE_ECB) creates a DES cipher object in ECB
+  (Electronic Codebook) mode - the simplest mode, where each block is
+  encrypted independently.
+- pad(text.encode(), 8): DES block size is 8 bytes, so if text length
+  is not a multiple of 8, padding is required (PKCS7-style).
+- .encrypt() / .decrypt() perform the actual encryption/decryption;
+  unpad() removes the padding afterward.
+
+SAMPLE INPUT/OUTPUT:
+Enter plaintext: HELLOWORLD
+Key: b'aB3xY9kL'
+Encrypted: 8f3a1c9e... (hex string)
+Decrypted: HELLOWORLD
+
+KEY POINT FOR VIVA:
+In ECB mode, the same plaintext block always produces the same
+ciphertext block - this is a known weakness of DES/ECB. CBC mode is
+used in practice for better security.
+
+
+====================================================================
+E2-2: RSA ALGORITHM
+====================================================================
+
+THEORY:
+RSA is a public-key cryptosystem whose security depends on the
+difficulty of factoring large numbers.
+- Choose two primes p, q; compute n = p*q, phi(n) = (p-1)(q-1)
+- Public key e (coprime with phi(n)); private key d = e^-1 mod phi(n)
+- Encryption: C = M^e mod n
+- Decryption: M = C^d mod n
+
+CODE EXPLANATION:
+- random_prime() generates a random prime in the range 100-300
+  (checked using is_prime).
+- n = p*q, phi = (p-1)*(q-1) are computed.
+- e is chosen randomly until gcd(e, phi) == 1.
+- d = pow(e, -1, phi): Python's built-in modular inverse (available
+  in Python 3.8+).
+- Each character is converted to ASCII and encrypted with
+  pow(ord(c), e, n), then converted to hex and concatenated.
+  Decryption splits the hex back into chunks and applies
+  pow(int(ch,16), d, n) to recover each character.
+
+SAMPLE INPUT/OUTPUT:
+Enter message: HI
+p, q: 173 211 (random primes)
+Public key : (e, n)
+Private key: (d, n)
+Encrypted  : (hex string)
+Decrypted  : HI
+
+
+====================================================================
+E2-3: DIFFIE-HELLMAN KEY EXCHANGE
+====================================================================
+
+THEORY:
+Diffie-Hellman is a key exchange protocol (not encryption) - two
+parties (Alice, Bob) establish a shared secret key over an insecure
+channel, which cannot be feasibly derived even if intercepted (due
+to the Discrete Logarithm Problem).
+- Public values: prime p, base g
+- Alice: private a, sends A = g^a mod p
+- Bob: private b, sends B = g^b mod p
+- Shared secret: Alice computes B^a mod p, Bob computes A^b mod p -
+  both equal g^(ab) mod p
+
+CODE EXPLANATION:
+- a, b: random private keys generated for both parties.
+- A = pow(g, a, p), B = pow(g, b, p): public values.
+- alice_shared_key = pow(B, a, p), bob_shared_key = pow(A, b, p) -
+  finally checked whether both are equal.
+
+SAMPLE INPUT/OUTPUT:
+Enter public prime modulus p: 23
+Enter public base g: 5
+Alice's Private (a): 6
+Alice's Public (A): 8
+Bob's Private (b): 15
+Bob's Public (B): 19
+Alice's Shared Secret: 2
+Bob's Shared Secret  : 2
+Keys Match?          : True
+
+
+====================================================================
+E2-4: MODULAR ARITHMETIC USING PRIMITIVE ROOT
+====================================================================
+
+THEORY:
+A primitive root g of a prime p is a number whose powers
+(g^1, g^2, ..., g^(p-1)) mod p produce all unique values from 1 to
+p-1 - meaning g can generate every element of the group. This is the
+foundation of cryptosystems like Diffie-Hellman and ElGamal.
+
+CODE EXPLANATION:
+- find_primitive_roots(p): for each candidate g, all powers mod p
+  are stored in a set; if the set size equals p-1, g is a
+  primitive root.
+- modular_exponentiation_table: displays a table of all powers of a
+  chosen primitive root.
+- Finally, the exponent law is verified in modular arithmetic:
+  g^a mod p * g^b mod p mod p == g^(a+b) mod p
+
+SAMPLE INPUT/OUTPUT:
+Enter a prime number p: 7
+All primitive roots of 7: [3, 5]
+Powers of primitive root g=3 modulo p=7:
+  g^1 mod 7 = 3
+  g^2 mod 7 = 2
+  ...
+g^3 mod 7 * g^5 mod 7 mod 7 = 1
+g^(3+5) mod 7                  = 1
+
+
+====================================================================
+E2-5: EXTENDED EUCLIDEAN ALGORITHM
+====================================================================
+
+THEORY:
+The Extended Euclidean Algorithm not only finds the GCD but also
+finds Bezout's coefficients x, y such that:
+a*x + b*y = gcd(a, b)
+This is used to find the MODULAR INVERSE, which is needed in RSA
+and other key-generation algorithms.
+
+CODE EXPLANATION:
+- Recursive extended_gcd(a, b): base case, if b == 0, return (a, 1, 0).
+- Recursive call extended_gcd(b, a % b) gives gcd, x1, y1, then
+  backward substitution computes the current step's x, y:
+  x = y1
+  y = x1 - (a // b) * y1
+- To find the modular inverse: call extended_gcd(a, m); if gcd == 1,
+  then x2 mod m is the modular inverse.
+
+SAMPLE INPUT/OUTPUT:
+Enter a: 30
+Enter b: 20
+GCD(30, 20) = 10
+Bezout coefficients: x = 1, y = -1
+Verification: 30*(1) + 20*(-1) = 10
+Enter modulus m to find modular inverse of a: 7
+Modular inverse of 30 mod 7 = 4
+Check: (30 * 4) mod 7 = 1
+
+====================================================================
+END OF NOTES
+====================================================================
